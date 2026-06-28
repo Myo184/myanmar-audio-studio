@@ -5,26 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Myanmar Audio & SRT Studio (VIP)</title>
     <style>
-        /* ဖုန်းမျက်နှာပြင်တစ်ခုလုံး အပြည့်ပေါ်စေရန် CSS ပုံစံညှိခြင်း */
+        /* ဖုန်းမျက်နှာပြင်တစ်ခုလုံး အပြည့်ပေါ်စေရန် */
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden;
             background-color: #0b0f19; /* Gradio Dark Theme နှင့် ကိုက်ညီမည့် အရောင် */
+            font-family: sans-serif;
         }
-        /* App Window အား ဖုန်း Screen တွင် ကွက်တိဖြစ်စေရန် */
-        iframe {
+        /* App အား ဖုန်းမျက်နှာပြင်တွင် အချိုးကျ စာမျက်နှာအပြည့် ပေါ်စေခြင်း */
+        gradio-app {
             width: 100%;
-            height: 100%;
-            border: none;
+            min-height: 100vh;
+            display: block;
         }
     </style>
 </head>
 <body>
 
-    <iframe src="https://myowin-hosting-mm-voice-tts-srt.hf.space/?__theme=dark"></iframe>
+    <script
+        type="module"
+        src="https://gradio.s3-us-west-2.amazonaws.com/4.44.1/gradio.js"
+    ></script>
+
+    <gradio-app src="https://myowin-hosting-mm-voice-tts-srt.hf.space"></gradio-app>
 
 </body>
 </html>
