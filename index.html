@@ -5,14 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Myanmar Audio & SRT Studio (VIP)</title>
     <style>
+        /* တစ်ပြင်လုံး ကွက်တိဖြစ်စေရန်နှင့် Scrollbar အဆင်ပြေစေရန် */
         body, html {
             margin: 0;
             padding: 0;
-            background-color: #0b0f19; /* Gradio Dark Theme နဲ့ ကိုက်ညီမည့် နောက်ခံရောင် */
+            width: 100%;
+            height: 100%;
+            background-color: #0b0f19; /* Gradio Dark Theme နှင့် ကိုက်ညီမည့် အရောင် */
             font-family: sans-serif;
-            min-height: 100vh;
         }
-        /* ဖုန်းမျက်နှာပြင်များတွင်ပါ အချိုးကျ လှပစေရန် */
+        /* ဖုန်းမျက်နှာပြင်တွင် responsive ဖြစ်စေရန် */
         gradio-app {
             width: 100%;
             min-height: 100vh;
