@@ -11,25 +11,20 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            background-color: #0b0f19; /* Gradio Dark Theme နှင့် ကိုက်ညီမည့် အရောင် */
-            font-family: sans-serif;
+            overflow: hidden;
+            background-color: #0b0f19; /* Gradio Dark Theme နောက်ခံအရောင် */
         }
-        /* App အား ဖုန်းမျက်နှာပြင်တွင် အချိုးကျ စာမျက်နှာအပြည့် ပေါ်စေခြင်း */
-        gradio-app {
+        /* App Window အား ဖုန်း Screen တွင် ကွက်တိဖြစ်စေခြင်း */
+        iframe {
             width: 100%;
-            min-height: 100vh;
-            display: block;
+            height: 100%;
+            border: none;
         }
     </style>
 </head>
 <body>
 
-    <script
-        type="module"
-        src="https://gradio.s3-us-west-2.amazonaws.com/4.44.1/gradio.js"
-    ></script>
-
-    <gradio-app src="https://myowin-hosting-mm-voice-tts-srt.hf.space"></gradio-app>
+    <iframe src="https://myowin-hosting-mm-voice-tts-srt.hf.space"></iframe>
 
 </body>
 </html>
