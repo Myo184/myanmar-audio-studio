@@ -5,11 +5,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Myanmar Audio and SRT Studio</title>
     <style>
-        body, html { margin: 0; padding: 0; height: 100%; overflow: hidden; background-color: #0f172a; }
-        iframe { border: none; width: 100%; height: 100%; }
+        /* Modern Premium Dark Theme CSS */
+        body, html { 
+            margin: 0; 
+            padding: 0; 
+            height: 100%; 
+            background-color: #0f172a; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #f8fafc;
+            overflow: hidden;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .header {
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 22px;
+            letter-spacing: 0.5px;
+        }
+        .header p {
+            margin: 5px 0 0 0;
+            font-size: 13px;
+            opacity: 0.8;
+        }
+        .app-container {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
     </style>
 </head>
 <body>
-    <iframe src="https://huggingface.co/spaces/myowin-hosting/mm-voice-tts-srt?embed=true"></iframe>
+
+    <div class="container">
+        <div class="header">
+            <h1>🎙️ Myanmar Audio & SRT Studio</h1>
+            <p>လစဉ်နှင့် နှစ်စဉ် စနစ်သုံး အသံနှင့် စာတန်းထိုး ပြုလုပ်စနစ်</p>
+        </div>
+        
+        <div class="app-container">
+            <iframe src="https://myowin-hosting-mm-voice-tts-srt.hf.space/?__theme=dark"></iframe>
+        </div>
+    </div>
+
 </body>
 </html>
