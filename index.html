@@ -8,20 +8,26 @@
         body, html {
             margin: 0;
             padding: 0;
-            height: 100%;
-            overflow: hidden;
-            background-color: #0b0f19; /* ဖန်သားပြင် နောက်ခံအရောင် */
+            background-color: #0b0f19; /* Gradio Dark Theme နဲ့ ကိုက်ညီမည့် နောက်ခံရောင် */
+            font-family: sans-serif;
+            min-height: 100vh;
         }
-        iframe {
+        /* ဖုန်းမျက်နှာပြင်များတွင်ပါ အချိုးကျ လှပစေရန် */
+        gradio-app {
             width: 100%;
-            height: 100%;
-            border: none;
+            min-height: 100vh;
+            display: block;
         }
     </style>
 </head>
 <body>
 
-    <iframe src="https://myowin-hosting-mm-voice-tts-srt.hf.space/?__theme=dark"></iframe>
+    <script
+        type="module"
+        src="https://gradio.s3-us-west-2.amazonaws.com/6.19.0/gradio.js"
+    ></script>
+
+    <gradio-app src="https://myowin-hosting-mm-voice-tts-srt.hf.space"></gradio-app>
 
 </body>
 </html>
