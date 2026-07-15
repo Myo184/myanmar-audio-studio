@@ -1,4 +1,3 @@
-gradio
 edge-tts
-pydub
-huggingface_hub
+gradio
+
