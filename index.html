@@ -1,31 +1,527 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="my">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Myanmar Audio & SRT Studio (VIP)</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>YF TTS Studio · Cyber Load</title>
     <style>
-        /* HTML နဲ့ Body ရဲ့ ဘေးကွက်လပ် အကုန်ဖျက်ခြင်း */
-        html, body {
-            margin: 0 !important;
-            padding: 0 !important;
-            width: 100% !important;
-            height: 100% !important;
-            overflow: hidden !important;
-            background-color: #0b0f19;
+        /* ===== RESET ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        /* App Window ကို ဖုန်းမျက်နှာပြင် ကွက်တိအပြည့်ဖြစ်စေခြင်း */
-        iframe {
-            width: 100% !important;
-            height: 100% !important;
-            border: none !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            display: block !important;
+
+        body {
+            font-family: 'Segoe UI', 'Poppins', system-ui, sans-serif;
+            background: #02050f;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ===== PARTICLE CANVAS ===== */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* ===== BACKGROUND GRID ===== */
+        .grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: 
+                linear-gradient(rgba(0, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        .grid-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, transparent 30%, #02050f 100%);
+        }
+
+        /* ===== LOADING SCREEN ===== */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            transition: opacity 0.8s ease, filter 0.8s ease;
+        }
+
+        #loading-screen.hidden {
+            opacity: 0;
+            filter: blur(10px);
+            pointer-events: none;
+        }
+
+        /* ===== HOLOGRAPHIC CARD ===== */
+        .hologram-card {
+            position: relative;
+            background: rgba(0, 20, 40, 0.3);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(0, 255, 255, 0.15);
+            border-radius: 60px;
+            padding: 50px 45px 40px 45px;
+            text-align: center;
+            max-width: 440px;
+            width: 92%;
+            box-shadow: 
+                0 0 60px rgba(0, 255, 255, 0.05),
+                inset 0 0 80px rgba(0, 255, 255, 0.02);
+            overflow: hidden;
+        }
+
+        /* Holographic shimmer overlay */
+        .hologram-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                from 0deg, 
+                transparent, 
+                rgba(0, 255, 255, 0.03), 
+                rgba(255, 0, 255, 0.03), 
+                rgba(0, 255, 255, 0.03), 
+                transparent
+            );
+            animation: holographicSpin 12s linear infinite;
+        }
+
+        @keyframes holographicSpin {
+            0%   { transform: rotate(0deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1.2); }
+        }
+
+        .hologram-card>* {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* ===== GLITCH LOGO WRAPPER ===== */
+        .logo-glitch {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 18px auto;
+            border-radius: 50%;
+            padding: 6px;
+            background: linear-gradient(135deg, #00ffff, #ff00ff, #00ffff);
+            background-size: 300% 300%;
+            animation: borderGlow 3s ease-in-out infinite alternate;
+            box-shadow: 0 0 50px rgba(0, 255, 255, 0.15);
+        }
+
+        @keyframes borderGlow {
+            0%   { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        .logo-glitch img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 50%;
+            display: block;
+            background: #02050f;
+            animation: glitchPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes glitchPulse {
+            0%, 100% { transform: scale(1); filter: hue-rotate(0deg); }
+            50%      { transform: scale(1.02); filter: hue-rotate(10deg); }
+        }
+
+        /* ===== GLITCH TEXT ===== */
+        .glitch-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            position: relative;
+            display: inline-block;
+        }
+
+        .glitch-title::before,
+        .glitch-title::after {
+            content: 'YF TTS STUDIO';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.6;
+        }
+
+        .glitch-title::before {
+            color: #00ffff;
+            transform: translate(-2px, -1px);
+            clip-path: inset(40% 0 60% 0);
+            animation: glitch1 2s infinite linear alternate-reverse;
+        }
+
+        .glitch-title::after {
+            color: #ff00ff;
+            transform: translate(2px, 1px);
+            clip-path: inset(70% 0 10% 0);
+            animation: glitch2 2.3s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch1 {
+            0%   { transform: translate(-3px, -2px); }
+            100% { transform: translate(3px, 2px); }
+        }
+        @keyframes glitch2 {
+            0%   { transform: translate(3px, 1px); }
+            100% { transform: translate(-3px, -1px); }
+        }
+
+        .brand-sub {
+            font-size: 12px;
+            color: rgba(0, 255, 255, 0.4);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-top: 4px;
+            font-weight: 300;
+        }
+
+        /* ===== NEON PROGRESS RING ===== */
+        .ring-neon {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            margin: 25px auto 20px auto;
+        }
+
+        .ring-neon svg {
+            transform: rotate(-90deg);
+            width: 130px;
+            height: 130px;
+        }
+
+        .ring-neon .bg {
+            fill: none;
+            stroke: rgba(0, 255, 255, 0.05);
+            stroke-width: 5;
+        }
+
+        .ring-neon .progress {
+            fill: none;
+            stroke: url(#neonGrad);
+            stroke-width: 5;
+            stroke-linecap: round;
+            stroke-dasharray: 376.991;
+            stroke-dashoffset: 376.991;
+            transition: stroke-dashoffset 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.3));
+        }
+
+        .ring-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .ring-center #timer-text {
+            font-size: 34px;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 2px;
+            text-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+        }
+
+        .ring-center .unit {
+            font-size: 14px;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.3);
+            display: block;
+            margin-top: -4px;
+        }
+
+        /* ===== STATUS ===== */
+        .status-cyber {
+            font-size: 13px;
+            color: rgba(0, 255, 255, 0.3);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 300;
+            margin-top: 4px;
+        }
+
+        .status-cyber.done {
+            color: #00ffff;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+
+        .scanline {
+            display: inline-block;
+            animation: scanPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes scanPulse {
+            0%, 100% { opacity: 0.3; }
+            50%      { opacity: 1; }
+        }
+
+        /* ===== FOOTER ===== */
+        .cyber-footer {
+            margin-top: 22px;
+            font-size: 10px;
+            color: rgba(0, 255, 255, 0.08);
+            letter-spacing: 3px;
+            border-top: 1px solid rgba(0, 255, 255, 0.03);
+            padding-top: 16px;
+        }
+
+        /* ===== TARGET SITE ===== */
+        #target-site {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            border: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 5;
+        }
+
+        #target-site.active {
+            display: block;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 480px) {
+            .hologram-card {
+                padding: 35px 22px 30px 22px;
+                border-radius: 40px;
+            }
+            .logo-glitch {
+                width: 90px;
+                height: 90px;
+            }
+            .glitch-title {
+                font-size: 20px;
+            }
+            .ring-neon {
+                width: 110px;
+                height: 110px;
+            }
+            .ring-neon svg {
+                width: 110px;
+                height: 110px;
+            }
+            .ring-center #timer-text {
+                font-size: 28px;
+            }
         }
     </style>
 </head>
 <body>
-    <iframe src="https://myowin-hosting-mm-voice-tts-srt.hf.space"></iframe>
+
+    <!-- ===== GRID BACKGROUND ===== -->
+    <div class="grid-bg"></div>
+
+    <!-- ===== PARTICLE CANVAS ===== -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- ===== LOADING SCREEN ===== -->
+    <div id="loading-screen">
+        <div class="hologram-card">
+
+            <!-- Logo with Glitch border -->
+            <div class="logo-glitch">
+                <img src="https://cdn.phototourl.com/free/2026-07-21-023573ae-5979-4c45-974c-84f2864a959a.png" alt="YF TTS Studio Logo" />
+            </div>
+
+            <!-- Glitch Title → YF TTS STUDIO -->
+            <div class="glitch-title">YF TTS STUDIO</div>
+            <div class="brand-sub">◈ Voice · SRT · Myanmar ◈</div>
+
+            <!-- Neon Ring -->
+            <div class="ring-neon">
+                <svg viewBox="0 0 130 130">
+                    <defs>
+                        <linearGradient id="neonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#00ffff" />
+                            <stop offset="50%" stop-color="#ff00ff" />
+                            <stop offset="100%" stop-color="#00ffff" />
+                        </linearGradient>
+                    </defs>
+                    <circle class="bg" cx="65" cy="65" r="60" />
+                    <circle class="progress" id="ring-progress" cx="65" cy="65" r="60" />
+                </svg>
+                <div class="ring-center">
+                    <div id="timer-text">05</div>
+                    <span class="unit">seconds</span>
+                </div>
+            </div>
+
+            <!-- Status -->
+            <div class="status-cyber" id="status-text">
+                <span class="scanline">⟡</span> INITIALIZING <span class="scanline">⟡</span>
+            </div>
+
+            <!-- Footer -->
+            <div class="cyber-footer">✦ CYBER · HOSTING · NEXT ✦</div>
+        </div>
+    </div>
+
+    <!-- ===== TARGET WEBSITE ===== -->
+    <iframe id="target-site" src="https://myowin-hosting-mm-voice-tts-srt.hf.space"></iframe>
+
+    <!-- ===== SCRIPT ===== -->
+    <script>
+        // ============================================
+        // 1. PARTICLES
+        // ============================================
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let w, h;
+        const particles = [];
+        const PARTICLE_COUNT = 80;
+
+        function resize() {
+            w = canvas.width = window.innerWidth;
+            h = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * w;
+                this.y = Math.random() * h;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.speedY = (Math.random() - 0.5) * 0.5;
+                this.opacity = Math.random() * 0.5 + 0.1;
+                this.color = Math.random() > 0.5 ? '0, 255, 255' : '255, 0, 255';
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0 || this.x > w || this.y < 0 || this.y > h) {
+                    this.reset();
+                }
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${this.color}, ${this.opacity})`;
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < PARTICLE_COUNT; i++) {
+            particles.push(new Particle());
+        }
+
+        function drawParticles() {
+            ctx.clearRect(0, 0, w, h);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            // Draw connections
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 150) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(0, 255, 255, ${0.06 * (1 - dist / 150)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(drawParticles);
+        }
+        drawParticles();
+
+        // ============================================
+        // 2. TIMER & RING
+        // ============================================
+        (function() {
+            let seconds = 5;
+            const timerText = document.getElementById('timer-text');
+            const statusText = document.getElementById('status-text');
+            const loadingScreen = document.getElementById('loading-screen');
+            const targetSite = document.getElementById('target-site');
+            const ringProgress = document.getElementById('ring-progress');
+
+            const circumference = 2 * Math.PI * 60; // ≈ 376.991
+
+            ringProgress.style.strokeDasharray = circumference;
+            ringProgress.style.strokeDashoffset = circumference;
+
+            function updateRing(progress) {
+                const offset = circumference - (progress / 100) * circumference;
+                ringProgress.style.strokeDashoffset = offset;
+            }
+
+            const interval = setInterval(() => {
+                seconds -= 1;
+                const progress = ((5 - seconds) / 5) * 100;
+
+                // Update timer (two digits)
+                timerText.textContent = String(seconds).padStart(2, '0');
+
+                // Update ring
+                updateRing(Math.min(progress, 100));
+
+                // Update status
+                if (seconds > 0) {
+                    statusText.innerHTML = `<span class="scanline">⟡</span> LOADING <span class="scanline">⟡</span>`;
+                    statusText.classList.remove('done');
+                }
+
+                if (seconds <= 0) {
+                    clearInterval(interval);
+                    timerText.textContent = '00';
+                    statusText.innerHTML = `<span class="scanline">✦</span> READY <span class="scanline">✦</span>`;
+                    statusText.classList.add('done');
+                    updateRing(100);
+
+                    setTimeout(() => {
+                        loadingScreen.classList.add('hidden');
+                        targetSite.classList.add('active');
+                    }, 500);
+                }
+            }, 1000);
+        })();
+    </script>
+
 </body>
 </html>
