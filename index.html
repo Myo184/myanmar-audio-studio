@@ -2,7 +2,7 @@
 <html lang="my">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>YF TTS Studio · Cyber Load</title>
     <style>
         /* ===== RESET ===== */
@@ -92,7 +92,6 @@
             overflow: hidden;
         }
 
-        /* Holographic shimmer overlay */
         .hologram-card::before {
             content: '';
             position: absolute;
@@ -121,7 +120,7 @@
             z-index: 2;
         }
 
-        /* ===== GLITCH LOGO WRAPPER ===== */
+        /* ===== GLITCH LOGO ===== */
         .logo-glitch {
             width: 120px;
             height: 120px;
@@ -208,7 +207,7 @@
             font-weight: 300;
         }
 
-        /* ===== NEON PROGRESS RING ===== */
+        /* ===== NEON RING ===== */
         .ring-neon {
             position: relative;
             width: 130px;
@@ -298,22 +297,6 @@
             padding-top: 16px;
         }
 
-        /* ===== TARGET SITE ===== */
-        #target-site {
-            display: none;
-            width: 100vw;
-            height: 100vh;
-            border: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 5;
-        }
-
-        #target-site.active {
-            display: block;
-        }
-
         /* ===== RESPONSIVE ===== */
         @media (max-width: 480px) {
             .hologram-card {
@@ -352,17 +335,12 @@
     <!-- ===== LOADING SCREEN ===== -->
     <div id="loading-screen">
         <div class="hologram-card">
-
-            <!-- Logo with Glitch border -->
             <div class="logo-glitch">
                 <img src="https://cdn.phototourl.com/free/2026-07-21-023573ae-5979-4c45-974c-84f2864a959a.png" alt="YF TTS Studio Logo" />
             </div>
-
-            <!-- Glitch Title → YF TTS STUDIO -->
             <div class="glitch-title">YF TTS STUDIO</div>
             <div class="brand-sub">◈ Voice · SRT · Myanmar ◈</div>
 
-            <!-- Neon Ring -->
             <div class="ring-neon">
                 <svg viewBox="0 0 130 130">
                     <defs>
@@ -381,24 +359,17 @@
                 </div>
             </div>
 
-            <!-- Status -->
             <div class="status-cyber" id="status-text">
                 <span class="scanline">⟡</span> INITIALIZING <span class="scanline">⟡</span>
             </div>
 
-            <!-- Footer -->
             <div class="cyber-footer">✦ CYBER · HOSTING · NEXT ✦</div>
         </div>
     </div>
 
-    <!-- ===== TARGET WEBSITE ===== -->
-    <iframe id="target-site" src="https://myowin-hosting-mm-voice-tts-srt.hf.space"></iframe>
-
     <!-- ===== SCRIPT ===== -->
     <script>
-        // ============================================
-        // 1. PARTICLES
-        // ============================================
+        // ===== PARTICLES =====
         const canvas = document.getElementById('particles-canvas');
         const ctx = canvas.getContext('2d');
         let w, h;
@@ -413,9 +384,7 @@
         resize();
 
         class Particle {
-            constructor() {
-                this.reset();
-            }
+            constructor() { this.reset(); }
             reset() {
                 this.x = Math.random() * w;
                 this.y = Math.random() * h;
@@ -428,9 +397,7 @@
             update() {
                 this.x += this.speedX;
                 this.y += this.speedY;
-                if (this.x < 0 || this.x > w || this.y < 0 || this.y > h) {
-                    this.reset();
-                }
+                if (this.x < 0 || this.x > w || this.y < 0 || this.y > h) this.reset();
             }
             draw() {
                 ctx.beginPath();
@@ -446,11 +413,7 @@
 
         function drawParticles() {
             ctx.clearRect(0, 0, w, h);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            // Draw connections
+            particles.forEach(p => { p.update(); p.draw(); });
             for (let i = 0; i < particles.length; i++) {
                 for (let j = i + 1; j < particles.length; j++) {
                     const dx = particles[i].x - particles[j].x;
@@ -470,19 +433,15 @@
         }
         drawParticles();
 
-        // ============================================
-        // 2. TIMER & RING
-        // ============================================
+        // ===== TIMER & REDIRECT =====
         (function() {
             let seconds = 5;
             const timerText = document.getElementById('timer-text');
             const statusText = document.getElementById('status-text');
             const loadingScreen = document.getElementById('loading-screen');
-            const targetSite = document.getElementById('target-site');
             const ringProgress = document.getElementById('ring-progress');
 
-            const circumference = 2 * Math.PI * 60; // ≈ 376.991
-
+            const circumference = 2 * Math.PI * 60;
             ringProgress.style.strokeDasharray = circumference;
             ringProgress.style.strokeDashoffset = circumference;
 
@@ -494,14 +453,9 @@
             const interval = setInterval(() => {
                 seconds -= 1;
                 const progress = ((5 - seconds) / 5) * 100;
-
-                // Update timer (two digits)
                 timerText.textContent = String(seconds).padStart(2, '0');
-
-                // Update ring
                 updateRing(Math.min(progress, 100));
 
-                // Update status
                 if (seconds > 0) {
                     statusText.innerHTML = `<span class="scanline">⟡</span> LOADING <span class="scanline">⟡</span>`;
                     statusText.classList.remove('done');
@@ -516,12 +470,12 @@
 
                     setTimeout(() => {
                         loadingScreen.classList.add('hidden');
-                        targetSite.classList.add('active');
+                        // ===== REDIRECT TO YOUR APP =====
+                        window.location.href = "https://myowin-hosting-mm-voice-tts-srt.hf.space";
                     }, 500);
                 }
             }, 1000);
         })();
     </script>
-
 </body>
 </html>
